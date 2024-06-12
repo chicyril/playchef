@@ -4,6 +4,7 @@ created flask app instance.
 """
 import os
 from flask import Flask
+from models import Storage, Category
 
 
 def create_instance_config(path):
@@ -30,6 +31,20 @@ def create_instance_config(path):
         config_file.write(some_configs)
 
 
+def create_default_categories(app):
+    """Create predefined categories for the app."""
+
+    predefined_categories = ['breakfast', 'lunch', 'dinner']
+    existing_predef_cats = [category.name for category in Category.query.all()]
+    if not set(predefined_categories).issubset(set(existing_predef_cats)):
+        for category_name in predefined_categories:
+            if category_name not in existing_predef_cats:
+                category = Category(name=category_name)
+                app.db.add(category)
+        app.db.commit()
+    app.db.rm_session()
+
+
 def create_app():
     """A flask app factory function"""
 
@@ -49,6 +64,21 @@ def create_app():
     # Read default config from a class and then from the instance config file.
     app.config.from_object('app.app_config.Default')
     app.config.from_pyfile('instance_cnfg.py', silent=True)
+
+    # Read dabase configurations from the app's config and create the database
+    # url string which is then stored in the app's config.
+    db_usr = app.config.get('DB_USER')
+    db_passwd = app.config.get('DB_PASSWORD')
+    db_host = app.config.get('DB_HOST')
+    db_name = app.config.get('DB_NAME')
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = (
+        f'mysql+mysqldb://{db_usr}:{db_passwd}@{db_host}/{db_name}')
+
+    # Initialize a database(Storage model) object for the app and create default
+    # categories.
+    app.db = Storage(app)
+    create_default_categories(app)
 
     @app.teardown_appcontext
     def remove_session(e):
