@@ -49,7 +49,7 @@ def login():
 
             if next_page and next_page != '/None':
                 return redirect(next_page)
-            return redirect(url_for('app_auth.login'))
+            return redirect(url_for('app_views.home'))
 
         flash('Invalid email or password', 'danger')
 
