@@ -57,17 +57,17 @@
         </div>
         <div class="card-footer">
           <a
-            href="#"
+            href="{{ url_for('app_views.recipe', recipe_id=recipe.id) }}"
             class="btn btn-primary"
             >View</a
           >
           <a
-            href="#"
+            href="{{ url_for('app_views.recipe_edit', recipe_id=recipe.id, next=next) }}"
             class="btn btn-warning"
             >Edit Recipe</a
           >
           <form
-            action="#"
+            action="{{ url_for('app_views.recipe_delete', recipe_id=recipe.id) }}"
             method="post"
             style="display: inline"
           >
@@ -82,7 +82,7 @@
           </form>
           {% if recipe not in current_user.favorites %}
           <form
-            action="#"
+            action="{{ url_for('app_views.add_to_favorites', recipe_id=recipe.id) }}"
             method="post"
             class="d-inline"
           >
@@ -96,7 +96,7 @@
           </form>
           {% else %}
           <form
-            action="#"
+            action="{{ url_for('app_views.remove_from_favorites', recipe_id=recipe.id) }}"
             method="post"
             style="display: inline"
           >
@@ -115,7 +115,7 @@
     {% else %}
     <p class="text-center">
       You have no recipes
-      <a href="#"
+      <a href="{{ url_for('app_views.recipe_create', next=next) }}"
         >Create one now!</a
       >
     </p>
@@ -140,12 +140,12 @@
         </div>
         <div class="card-footer">
           <a
-            href="#"
+            href="{{ url_for('app_views.recipe', recipe_id=recipe.id) }}"
             class="btn btn-primary"
             >View</a
           >
           <form
-            action="#"
+            action="{{ url_for('app_views.remove_from_favorites', recipe_id=recipe.id) }}"
             method="post"
             style="display: inline"
           >

@@ -6,6 +6,7 @@ import os
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from flask_wtf import CSRFProtect
 from models import Storage, Category, User
 
 
@@ -76,6 +77,11 @@ def create_app():
 
     app.config['SQLALCHEMY_DATABASE_URI'] = (
         f'mysql+mysqldb://{db_usr}:{db_passwd}@{db_host}/{db_name}')
+
+    # Initialize csfr with app to help protect forms that are dynamically
+    # created using html and not wtforms.
+    csrf = CSRFProtect()
+    csrf.init_app(app)
 
     # Initialize a database(Storage model) object for the app and create default
     # categories.

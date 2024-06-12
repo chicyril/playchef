@@ -1,0 +1,81 @@
+{% extends 'base.html' %} {% block main %}
+<div class="container-sm mt-4 border">
+  <h2>{{ recipe.name }}</h2>
+  <img
+    src="{{ url_for('static', filename='recipe_imgs/' ~ recipe.image) }}"
+    alt="{{ recipe.name }}"
+    class="img-fluid mb-3 ml-auto me-auto"
+  />
+  <p>{{ recipe.description }}</p>
+
+  <h4>Ingredients</h4>
+  <ul>
+    {% for ingredient in recipe.ingredients %}
+    <li>{{ ingredient.name }}</li>
+    {% endfor %}
+  </ul>
+
+  <h4>Steps</h4>
+  <ol>
+    {% for step in recipe.steps %}
+    <li>{{ step.description }}</li>
+    {% endfor %}
+  </ol>
+
+  <h3>Categories</h3>
+  <ul>
+    {% for category in recipe.categories %}
+    <li>{{ category.name }}</li>
+    {% endfor %}
+  </ul>
+
+  {% if recipe.user == current_user %}
+  <a
+    href="{{ url_for('app_views.recipe_edit', recipe_id=recipe.id) }}"
+    class="btn btn-warning"
+    >Edit</a
+  >
+  <form
+    action="{{ url_for('app_views.recipe_delete', recipe_id=recipe.id) }}"
+    method="POST"
+    class="d-inline"
+  >
+    {{ form.hidden_tag() }}
+    <button
+      type="submit"
+      class="btn btn-danger"
+    >
+      Delete
+    </button>
+  </form>
+  {% endif %} {% if recipe not in current_user.favorites %}
+  <form
+    action="{{ url_for('app_views.add_to_favorites', recipe_id=recipe.id) }}"
+    method="POST"
+    class="d-inline"
+  >
+    {{ form.hidden_tag() }}
+    <button
+      type="submit"
+      class="btn btn-success"
+    >
+      Add to Favorites
+    </button>
+  </form>
+  {% else %}
+  <form
+    action="{{ url_for('app_views.remove_from_favorites', recipe_id=recipe.id) }}"
+    method="post"
+    style="display: inline"
+  >
+    {{ form.hidden_tag() }}
+    <button
+      type="submit"
+      class="btn btn-danger"
+    >
+      Unfavorites
+    </button>
+  </form>
+  {% endif %}
+</div>
+{% endblock main %}

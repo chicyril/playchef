@@ -34,12 +34,12 @@ class Default:
 
     # [STATIC FOLDERS]
     MAX_CONTENT_PATH = 1024 * 1024
-    RECIPE_IMG_FOLDER = os.path.join(os.path.dirname(__file__),
+    RECIPE_IMG_DIR = os.path.join(os.path.dirname(__file__),
                                      'static/recipe_imgs')
-    PROFILE_PIC_FOLDER = os.path.join(os.path.dirname(__file__),
+    PROFILE_PIC_DIR = os.path.join(os.path.dirname(__file__),
                                       'static/profile_pics')
 
-    if not os.path.exists(RECIPE_IMG_FOLDER):
-        os.makedirs(RECIPE_IMG_FOLDER)
-    if not os.path.exists(PROFILE_PIC_FOLDER):
-        os.makedirs(PROFILE_PIC_FOLDER)
+    if not os.path.exists(RECIPE_IMG_DIR):
+        os.makedirs(RECIPE_IMG_DIR)
+    if not os.path.exists(PROFILE_PIC_DIR):
+        os.makedirs(PROFILE_PIC_DIR)

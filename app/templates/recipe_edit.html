@@ -1,0 +1,207 @@
+{% extends 'base.html' %} {% block main %}
+<div class="container">
+  <form
+    action="{{ url_for('app_views.recipe_edit', recipe_id=recipe.id, next=next)}}"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    {{ form.hidden_tag() }}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Edit Recipe</legend>
+      <div class="form-group">
+        <div class="account-img">
+          <img
+            src="{{ url_for('static', filename='recipe_imgs/' ~ form.image.data) }}"
+            alt="Recipe Image"
+            class="img-thumbnail mt-2"
+            width="150"
+          />
+        </div>
+        {{ form.image.label(class="form-label") }} {{
+        form.image(class="form-control-file") }} {% if form.image.errors %} {%
+        for error in form.image.errors %}
+        <span class="text-danger">{{ error }}</span><br />
+        {% endfor %} {% endif %}
+      </div>
+      <div class="form-group">
+        {{ form.name.label(class="form-control-label") }} {% if form.name.errors
+        %} {{ form.name(class="form-control form-control-lg is-invalid")}}
+        <div class="invalid-feedback">
+          {% for error in form.name.errors %}
+          <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{ form.name(class="form-control") }} {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.description.label(class="form-control-label") }} {% if
+        form.description.errors %} {{ form.description(class="form-control
+        form-control-lg is-invalid") }}
+        <div class="invalid-feedback">
+          {% for error in form.description.errors %}
+          <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{ form.description(class="form-control") }} {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.ingredients.label(class="form-control-label") }}
+        <div id="ingredients-list">
+          {% for ingredient in form.ingredients %}
+          <div class="form-group">
+            {{ ingredient.form.name(class="form-control") }}
+            <button
+              type="button"
+              class="btn btn-danger"
+              onclick="removeIngredient(this)"
+            >
+              Remove
+            </button>
+          </div>
+          {% endfor %}
+        </div>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="addIngredient()"
+        >
+          Add Ingredient
+        </button>
+      </div>
+
+      <div class="form-group">
+        {{ form.steps.label(class="form-control-label") }}
+        <div id="steps-list">
+          {% for step in form.steps %}
+          <div class="form-group">
+            {{ step.form.description(class="form-control") }}
+            <button
+              type="button"
+              class="btn btn-danger"
+              onclick="removeStep(this)"
+            >
+              Remove
+            </button>
+          </div>
+          {% endfor %}
+        </div>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="addStep()"
+        >
+          Add Step
+        </button>
+      </div>
+
+      <div class="form-group">
+        {{ form.categories.label(class="form-control-label") }} {% if
+        form.categories.errors %} {{ form.categories(class="form-control
+        form-control-lg is-invalid")}}
+        <div class="invalid-feedback">
+          {% for error in form.categories.errors %}
+          <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div>
+          {% for id, name in form.categories.choices %}
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              name="categories"
+              id="category-{{ id }}"
+              value="{{ id }}"
+              {%
+              if
+              id
+              in
+              form.categories.data
+              %}checked{%
+              endif
+              %}
+            />
+            <label
+              class="form-check-label"
+              for="category-{{ id }}"
+            >
+              {{ name }}
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.new_category.label(class="form-control-label") }} {% if
+        form.new_category.errors %} {{ form.new_category(class="form-control
+        form-control-lg is-invalid")}}
+        <div class="invalid-feedback">
+          {% for error in form.new_category.errors %}
+          <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{ form.new_category(class="form-control") }} {% endif %}
+      </div>
+
+      <div class="form-group">{{ form.submit(class="btn btn-primary") }}</div>
+    </fieldset>
+  </form>
+</div>
+<script>
+  function addIngredient() {
+    const ingredientsList = document.getElementById("ingredients-list");
+    const newIndex = ingredientsList.children.length;
+    const newIngredient = `
+      <div class="form-group">
+        <input
+          class="form-control"
+          name="ingredients-${newIndex}-name"
+          type="text"
+          id="ingredients-${newIndex}-name"
+        >
+        <button
+          type="button"
+          class="btn btn-danger"
+          onclick="removeIngredient(this)"
+          >
+          Remove
+        </button>
+      </div>`;
+    ingredientsList.insertAdjacentHTML("beforeend", newIngredient);
+  }
+
+  function removeIngredient(button) {
+    button.parentElement.remove();
+  }
+
+  function addStep() {
+    const stepsList = document.getElementById("steps-list");
+    const newIndex = stepsList.children.length;
+    const newStep = `
+      <div class="form-group">
+        <textarea
+          class="form-control"
+          name="steps-${newIndex}-description"
+          id="steps-${newIndex}-description">
+        </textarea>
+        <button
+          type="button"
+          class="btn btn-danger"
+          onclick="removeStep(this)"
+          >
+          Remove
+        </button>
+      </div>`;
+    stepsList.insertAdjacentHTML("beforeend", newStep);
+  }
+
+  function removeStep(button) {
+    button.parentElement.remove();
+  }
+</script>
+{% endblock %}
