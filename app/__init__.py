@@ -4,7 +4,9 @@ created flask app instance.
 """
 import os
 from flask import Flask
-from models import Storage, Category
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
+from models import Storage, Category, User
 
 
 def create_instance_config(path):
@@ -79,6 +81,20 @@ def create_app():
     # categories.
     app.db = Storage(app)
     create_default_categories(app)
+
+    from app.views import app_auth, app_views
+    app.register_blueprint(app_auth)
+    app.register_blueprint(app_views)
+
+    app.bcrypt = Bcrypt(app)
+
+    app.login_manager = LoginManager(app)
+    app.login_manager.login_view = 'app_auth.login'
+    app.login_manager.login_message_category = 'info'
+
+    @app.login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(user_id)
 
     @app.teardown_appcontext
     def remove_session(e):
