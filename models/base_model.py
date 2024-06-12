@@ -6,6 +6,7 @@ from sqlalchemy import Column, String, DateTime
 from sqlalchemy.orm import declarative_base
 
 
+# Create a declarative base for mapping classes to database tables.
 Base = declarative_base()
 
 

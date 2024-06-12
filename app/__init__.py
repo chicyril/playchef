@@ -48,6 +48,7 @@ def create_default_categories(app):
     app.db.rm_session()
 
 
+# Define a factory function for creating flask app instance.
 def create_app():
     """A flask app factory function"""
 
@@ -88,25 +89,31 @@ def create_app():
     app.db = Storage(app)
     create_default_categories(app)
 
+    # Register blueprints with the app.
     from app.views import app_auth, app_views
     app.register_blueprint(app_auth)
     app.register_blueprint(app_views)
 
+    # Create a bcrypt instance as attribute of app for hashing user password.
     app.bcrypt = Bcrypt(app)
 
+    # Create login_manager attribute for managing user session
     app.login_manager = LoginManager(app)
     app.login_manager.login_view = 'app_auth.login'
     app.login_manager.login_message_category = 'info'
 
+    # Load the user object from the database during user session.
     @app.login_manager.user_loader
     def load_user(user_id):
         return User.query.get(user_id)
 
+    # Remove the current database session after each request.
     @app.teardown_appcontext
     def remove_session(e):
         """Remove the current scoped session after a request."""
         app.db.rm_session()
 
+    # Handle all 404 errors.
     @app.errorhandler(404)
     def not_found(error):
         """Handle 404 error."""

@@ -3,6 +3,8 @@
 from sqlalchemy import Column, String, ForeignKey, Table
 from models.base_model import Base
 
+
+# Many-to-many table for the user favorites recipe.
 favorites_table = Table('favorites', Base.metadata,
                         Column('user_id', String(60),
                                ForeignKey('users.id'),

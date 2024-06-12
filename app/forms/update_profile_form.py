@@ -9,18 +9,22 @@ from models import User
 
 
 class ProfileUpdateForm(FlaskForm):
+    """
+    Profile update form: Define fields for profile update form and
+    validation functions.
+    """
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=64)])
 
     email = StringField('Email', validators=[DataRequired(), Email()])
 
     dp_file = FileField('Display Picture',
-                            validators=[FileAllowed(['jpg', 'png'])])
+                        validators=[FileAllowed(['jpg', 'png'])])
 
     submit = SubmitField('Update')
 
     def validate_username(self, username):
-        """Validate username from database."""
+        """Validate the new username passed by user."""
         if current_user.username != username.data:
             user = User.query.filter_by(username=username.data).first()
             if user:
@@ -28,7 +32,7 @@ class ProfileUpdateForm(FlaskForm):
                     'That username is taken. Please choose a different one')
 
     def validate_email(self, email):
-        """Validate username from database."""
+        """Validate the new email passed by the user."""
         if current_user.email != email.data:
             user = User.query.filter_by(email=email.data).first()
             if user:

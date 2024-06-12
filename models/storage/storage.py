@@ -9,20 +9,30 @@ class Storage:
     """Definition of the storage class."""
 
     def __init__(self, app):
-        """Initialize database: connect to db, create schemas and session."""
+        """
+        Initialize database:
+            connect to database server, create schemas and session.
+        """
 
+        # Create database url with configs from the app.
         db_url = app.config.get('SQLALCHEMY_DATABASE_URI')
         self.__engine = create_engine(db_url, pool_pre_ping=True)
 
+        # Reset the database everytime the app is run in testing mode,
+        # i.e TESTING = True in app's config.
         if app.config.get('TESTING'):
             Base.metadata.drop_all(self.__engine)
 
+        # Create table schemas in database.
         Base.metadata.create_all(self.__engine)
 
+        # Create a database scoped session.
         session_factory = sessionmaker(bind=self.__engine,
                                        expire_on_commit=False)
         self.__session = scoped_session(session_factory)
 
+        # Add query attribute to Base to enable easy query of the database with
+        # class names.
         Base.query = self.__session.query_property()
 
     def add(self, obj):

@@ -8,7 +8,8 @@ from models import User
 
 
 class SignUpForm(FlaskForm):
-    """Sign-up form class."""
+    """Sign-up form class: Defines fields for signup form and validation
+    functions for username and email."""
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=30)])
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -20,14 +21,14 @@ class SignUpForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
-        """Validate username from database."""
+        """Validate the username passed by the user."""
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError(
                 'That username is taken. Please choose a different one')
 
     def validate_email(self, email):
-        """Validate username from database."""
+        """Validate the email passed by the user."""
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError(
@@ -35,7 +36,7 @@ class SignUpForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    """Login form class."""
+    """Login form class: Define fields for the login form."""
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password',
                              validators=[DataRequired(), Length(min=4)])

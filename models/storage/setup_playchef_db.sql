@@ -1,4 +1,4 @@
--- prepares a MySQL server for the project
+-- Prepares a MySQL database server for the project.
 
 DROP DATABASE IF EXISTS playchef_db;
 CREATE DATABASE IF NOT EXISTS playchef_db;

@@ -19,20 +19,20 @@ from urllib.parse import quote_plus
 
 class Default:
     """Test configuration"""
-    # [APP]
-    TESTING = True
+    ## [APP]
+    # TESTING = True
     SECRET_KEY = getenv('PLAYCHEF_SECRET_KEY', '76f1b197713RandoM369e13508549')
     HOST = getenv('HOST', '0.0.0.0')
     PORT = getenv('PORT', 5000)
 
-    # [DATABASE]
+    ## [DATABASE]
     DB_HOST = getenv('DB_HOST', 'localhost')
     DB_NAME = getenv('DB_NAME', 'playchef_db')
     DB_USER = getenv('DB_USER', 'playchef_dev')
     DB_PASSWORD = quote_plus(getenv('DB_PASSWORD', 'Devchef1_'))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # [STATIC FOLDERS]
+    ## [STATIC_DIRS]
     MAX_CONTENT_PATH = 1024 * 1024
     RECIPE_IMG_DIR = os.path.join(os.path.dirname(__file__),
                                      'static/recipe_imgs')
