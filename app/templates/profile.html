@@ -1,0 +1,170 @@
+{% extends 'base.html' %} {% block main %}
+<div class="content-section">
+  <div class="media">
+    <img
+      class="rounded-circle account-img"
+      src="{{ url_for('static', filename='profile_pics/' ~ current_user.display_pic) }}"
+      alt="Profile Picture"
+    />
+    <div class="media-body">
+      <h2 class="account-heading">{{ current_user.username }}</h2>
+      <p class="text-secondary">{{ current_user.email }}</p>
+    </div>
+  </div>
+  <form
+    action="{{ url_for('app_views.profile') }}"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    {{ form.hidden_tag() }}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Profile Info</legend>
+
+      <div class="form-group">
+        {{ form.username.label(class="form-control-label") }} {% if
+        form.username.errors %} {{ form.username(class="form-control
+        form-control-lg is-invalid")}}
+        <div class="invalid-feedback">
+          {% for error in form.username.errors %}
+          <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{ form.username(class="form-control form-control-large") }}
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.email.label(class="form-control-label") }} {% if
+        form.email.errors %} {{ form.email(class="form-control form-control-lg
+        is-invalid")}}
+        <div class="invalid-feedback">
+          {% for error in form.email.errors %}
+          <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{ form.email(class="form-control form-control-large") }} {%
+        endif %}
+      </div>
+      <div class="form-group">
+        {{ form.dp_file.label(class="form-control-label") }} {{
+        form.dp_file(class='form-control-file') }} {% if form.dp_file.errors %}
+        {% for error in form.dp_file.errors %}
+        <span class="text-danger">{{ error }}</span><br />
+        {% endfor %} {% endif %}
+      </div>
+    </fieldset>
+
+    <div class="form-group">
+      {{ form.submit(class="btn btn-outline-info") }}
+    </div>
+  </form>
+
+  <h3 class="mt-4">Your Recipes</h3>
+  <div class="row">
+    {% for recipe in current_user.recipes %}
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <img
+          class="card-img-top"
+          src="{{ url_for('static', filename='recipe_imgs/' ~ recipe.image) }}"
+          alt="{{ recipe.title }}"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ recipe.name }}</h5>
+          <p class="card-text">{{ recipe.description }}</p>
+          <a
+            href="{{ url_for('app_views.recipe', recipe_id=recipe.id) }}"
+            class="btn btn-primary"
+            >View</a
+          >
+          <a
+            href="{{ url_for('app_views.recipe_edit', recipe_id=recipe.id, next=next) }}"
+            class="btn btn-warning"
+            >Edit</a
+          >
+          <form
+            action="{{ url_for('app_views.recipe', recipe_id=recipe.id) }}"
+            method="POST"
+            class="d-inline"
+          >
+            {{ form.hidden_tag() }}
+            <button
+              type="submit"
+              class="btn btn-danger"
+            >
+              Delete
+            </button>
+          </form>
+          {% if recipe not in current_user.favorites %}
+          <form
+            action="{{ url_for('app_views.add_to_favorites', recipe_id=recipe.id) }}"
+            method="POST"
+            class="d-inline"
+          >
+            {{ form.hidden_tag() }}
+            <button
+              type="submit"
+              class="btn btn-success"
+            >
+              Add to Favorites
+            </button>
+          </form>
+          {% else %}
+          <form
+            action="{{ url_for('app_views.remove_from_favorites', recipe_id=recipe.id) }}"
+            method="post"
+            style="display: inline"
+          >
+            {{ form.hidden_tag() }}
+            <button
+              type="submit"
+              class="btn btn-danger"
+            >
+              Unfavorites
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h3 class="mt-4">Favorite Recipes</h3>
+  <div class="row">
+    {% for recipe in current_user.favorites %}
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <img
+          class="card-img-top"
+          src="{{ url_for('static', filename='recipe_images/' ~ recipe.image) }}"
+          alt="{{ recipe.title }}"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ recipe.name }}</h5>
+          <p class="card-text">{{ recipe.description }}</p>
+          <a
+            href="{{ url_for('app_views.recipe', recipe_id=recipe.id) }}"
+            class="btn btn-primary"
+            >View</a
+          >
+          <form
+            action="{{ url_for('app_views.remove_from_favorites', recipe_id=recipe.id) }}"
+            method="post"
+            style="display: inline"
+          >
+            {{ form.hidden_tag() }}
+            <button
+              type="submit"
+              class="btn btn-danger"
+            >
+              Unfavorites
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock main %}
