@@ -1,3 +1,10 @@
 .vscode/
 __pycache__/
 .swp
+instance/
+
+/app/static/profile_pics/*
+/app/static/recipe_imgs/*
+
+!/app/static/profile_pics/default.jpg
+!/app/static/recipe_imgs/recipe_default.jpg

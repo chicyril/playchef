@@ -1,0 +1,207 @@
+{% extends "base.html" %} {% block main %}
+
+<section class="jumbotron text-center bg-primary text-white">
+  <div class="container">
+    <h1 class="jumbotron-heading">
+      {% if current_user.is_authenticated %} Welcome, {{ current_user.username
+      }}! {% else %} Welcome {% endif %}
+    </h1>
+    <p class="lead">
+      Discover new recipes, create your own, and manage your favorites.
+    </p>
+  </div>
+</section>
+
+<section class="container my-5">
+  <h2 class="text-center mb-4">Browse Recipes</h2>
+  <form
+    id="filter-form"
+    class="mb-4"
+  >
+    <div class="form-group">
+      <label for="category-select">Select a Category:</label>
+      <select
+        id="category-select"
+        class="form-control"
+      >
+        <option value="all">All</option>
+        <option value="breakfast">Breakfast</option>
+        <option value="lunch">Lunch</option>
+        <option value="dinner">Dinner</option>
+        {% for category in categories %}
+        <option value="{{ category }}">{{ category.title() }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+  <div
+    id="recipes-container"
+    class="row"
+  ></div>
+</section>
+
+<section class="container my-5">
+  <h2 class="text-center mb-4">Your Recipes</h2>
+  <div class="row">
+    {% for recipe in current_user.recipes %}
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100">
+        <img
+          src="{{ url_for('static', filename='recipe_imgs/' ~ recipe.image) }}"
+          class="card-img-top"
+          alt="{{ recipe.name }}"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ recipe.name }}</h5>
+          <p class="card-text">{{ recipe.description }}</p>
+        </div>
+        <div class="card-footer">
+          <a
+            href="{{ url_for('app_views.recipe', recipe_id=recipe.id) }}"
+            class="btn btn-primary"
+            >View</a
+          >
+          <a
+            href="{{ url_for('app_views.recipe_edit', recipe_id=recipe.id, next=next) }}"
+            class="btn btn-warning"
+            >Edit Recipe</a
+          >
+          <form
+            action="{{ url_for('app_views.recipe_delete', recipe_id=recipe.id) }}"
+            method="post"
+            style="display: inline"
+          >
+            {{ form.hidden_tag() }}
+
+            <button
+              type="submit"
+              class="btn btn-danger"
+            >
+              Delete
+            </button>
+          </form>
+          {% if recipe not in current_user.favorites %}
+          <form
+            action="{{ url_for('app_views.add_to_favorites', recipe_id=recipe.id) }}"
+            method="post"
+            class="d-inline"
+          >
+            {{ form.hidden_tag() }}
+            <button
+              type="submit"
+              class="btn btn-success"
+            >
+              Add to Favorites
+            </button>
+          </form>
+          {% else %}
+          <form
+            action="{{ url_for('app_views.remove_from_favorites', recipe_id=recipe.id) }}"
+            method="post"
+            style="display: inline"
+          >
+            {{ form.hidden_tag() }}
+            <button
+              type="submit"
+              class="btn btn-danger"
+            >
+              Unfavorites
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <p class="text-center">
+      You have no recipes
+      <a href="{{ url_for('app_views.recipe_create', next=next) }}"
+        >Create one now!</a
+      >
+    </p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container my-5">
+  <h2 class="text-center mb-4">Your Favorite Recipes</h2>
+  <div class="row">
+    {% for recipe in current_user.favorites %}
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card h-100">
+        <img
+          src="{{ url_for('static', filename='recipe_imgs/' ~ recipe.image) }}"
+          class="card-img-top"
+          alt="{{ recipe.name }}"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ recipe.name }}</h5>
+          <p class="card-text">{{ recipe.description }}</p>
+        </div>
+        <div class="card-footer">
+          <a
+            href="{{ url_for('app_views.recipe', recipe_id=recipe.id) }}"
+            class="btn btn-primary"
+            >View</a
+          >
+          <form
+            action="{{ url_for('app_views.remove_from_favorites', recipe_id=recipe.id) }}"
+            method="post"
+            style="display: inline"
+          >
+            {{ form.hidden_tag() }}
+            <button
+              type="submit"
+              class="btn btn-danger"
+            >
+              Unfavorites
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <p class="text-center">You have no favorite recipes.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const categorySelect = document.getElementById("category-select");
+    const recipesContainer = document.getElementById("recipes-container");
+
+    function fetchRecipes(category) {
+      fetch(`{{ url_for('app_views.filter_recipes') }}?category=${category}`)
+        .then((response) => response.json())
+        .then((data) => {
+          recipesContainer.innerHTML = "";
+          data.recipes.forEach((recipe) => {
+            const imgSrc = `{{ url_for('static', filename='recipe_imgs/') }}`;
+            const imgFile = `${imgSrc}${recipe.image}`;
+            const recipeCard = `
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <img src="${imgFile}" class="card-img-top" alt="${recipe.name}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${recipe.name}</h5>
+                                        <p class="card-text">${recipe.description}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="/recipe/${recipe.id}" class="btn btn-primary">View Recipe</a>
+                                    </div>
+                                </div>
+                            </div>`;
+            recipesContainer.insertAdjacentHTML("beforeend", recipeCard);
+          });
+        });
+    }
+
+    fetchRecipes("all");
+
+    categorySelect.addEventListener("change", function () {
+      fetchRecipes(this.value);
+    });
+  });
+</script>
+{% endblock main %}
