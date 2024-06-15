@@ -1,0 +1,223 @@
+body {
+    margin: 0;
+}
+
+.first-container {
+    background-color: #1f2937;
+    color: white;
+    padding: 20px;
+}
+
+
+.header {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 100px;
+}
+
+
+.left-header {
+    font-size: 28px;
+    color: #f9faf8;
+    font-weight: bolder;
+}
+
+a {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    gap: 22px;
+    font-size: 20px;
+    color: #e5e7eb;
+}
+
+.right-header a:hover {
+    background-color: lightslategray;
+}
+
+h1 {
+    color: #f9faf8;
+    font-weight: bolder;
+    font-size: 48px;
+}
+
+h2 {
+    font-size: 18px;
+    color: #e5e7eb;
+    margin-top: -20px;
+    margin-bottom: 15px;
+}
+
+
+
+.top-body-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+}
+
+.left-top-body {
+    width: 500px;
+    margin-top: -20px;
+}
+
+.right-body-container img {
+    width: 600px;
+    height: 300px;
+    border-radius: 20px;
+}
+
+button {
+    background-color: #3882f6;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 2px solid #3882f6;
+    font-size: 16px;
+    font-weight: bolder;
+}
+
+button:hover {
+    background-color: lightslategray;
+}
+
+
+/* second site section */
+h3 {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bolder;
+    color: #1f2937;
+    margin: 40px 0;
+}
+.second-sub-container {
+    display: flex;
+    justify-content: center;
+    gap: 45px;
+    flex-wrap: wrap;
+    margin-bottom: 70px;
+}
+
+.second-sub-container-img {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.img-game {
+    /* you can make the image width 200px for it to be smaller */
+    width: 100%;
+    height: 160px;
+    border-radius: 10px;
+}
+
+.p-header {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 10px;
+    color: #1f2937;
+    font-weight: 800;
+}
+
+.p-content {
+    width: 250px;
+    text-align: center;
+    margin-top: -12px;
+    font-size: 16px;
+    color: #1f2937;
+}
+
+/* third site section */
+.third-site-section {
+    background-color: #e5e7eb;
+    padding: 70px 0;
+}
+
+
+.quote {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0;
+}
+
+.p-quote {
+    width: 1000px;
+    font-size: 28px;
+    color: #1f2937;
+    font-style: italic;
+    text-align: justify;
+    margin-bottom: 0;
+}
+
+.madara-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 0px;
+}
+
+.madara {
+    width: 1000px;
+    text-align: end;
+    color: #1f2937;
+    font-size: 27px;
+    font-weight: bolder;
+    margin-top: 0;
+    opacity: 0.9;
+}
+
+/* fourth site section */
+.fourth-site-section {
+    background-color: #3882f6;
+    border-radius: 15px;
+    padding: 25px 60px;
+    display: flex;
+    justify-content: space-around;
+    margin: 80px 150px;
+    flex-wrap: wrap;
+}
+
+.clt,
+.clt-2 {
+    color: white;
+}
+
+.clt {
+    font-size: 28px;
+    font-weight: bolder;
+    margin-bottom: 0;
+}
+
+.clt-2 {
+    font-size: 22px;
+    margin-top: 0;
+}
+
+.download {
+    align-self: center;
+    border: 2px solid white;
+    font-weight: bolder;
+    padding: 10px 30px;
+}
+
+/* last site section */
+.last-container {
+    background-color: #1f2937;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    color: white;
+    padding: 30px;
+    font-size: 18px;
+}
+
+.c {
+    border: 1px solid white;
+    border-radius: 100px;
+    font-size: 16px;
+    padding: 0 5px;
+}
+
+
+
