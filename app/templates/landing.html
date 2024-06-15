@@ -16,11 +16,7 @@
                 </div>
 
                 <div class="right-header">
-                    <ul>
-                        <li></li>
-                        <li></li>
-                        <li>Sign-up</li>
-                    </ul>
+                    <a href="{{ url_for('app_auth.signup') }}">Sign-up</a>
                 </div>
             </div>
 
@@ -85,7 +81,7 @@
             </div>
 
             <button class="download">
-                Sign-up
+                <a href="{{ url_for('app_auth.signup') }}">Sign-up</a>
             </button>
         </div>
 
